@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SZT.Test.ResultView"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             xmlns:viewmodel="clr-namespace:SZT.Test.ViewModels"
+             x:DataType="viewmodel:ResultViewModel"
+             Title="ResultView">
+    <dxc:ChartView>
+        <dxc:ChartView.Series>
+            <dxc:LineSeries DisplayName="{Binding Sgin}">
+                <dxc:LineSeries.Data>
+                    <dxc:SeriesDataAdapter DataSource="{Binding DataPoints}">
+                        <dxc:ValueDataMember Type="Value" Member="value"/>
+                    </dxc:SeriesDataAdapter>
+                </dxc:LineSeries.Data>
+            </dxc:LineSeries>
+        </dxc:ChartView.Series>
+        <dxc:ChartView.AxisY>
+            <dxc:NumericAxisY>
+                <dxc:NumericAxisY.Title>
+                    <dxc:AxisTitle Text="光强"/>
+                </dxc:NumericAxisY.Title>
+                
+            </dxc:NumericAxisY>
+        </dxc:ChartView.AxisY>
+    </dxc:ChartView>
+</ContentPage>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SZT.Test.View.ChartView"
+             xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
+             xmlns:viewmodel="clr-namespace:SZT.Test.ViewModels"
+             x:DataType="viewmodel:ResultViewModel"
+             Title="ChartView">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="AUTO"/>
+        </Grid.ColumnDefinitions>
+        
+        <dxc:ChartView Grid.Column="0">
+            <dxc:ChartView.Series>
+                <dxc:SplineSeries DisplayName="{Binding Light}">
+                    <dxc:SplineSeries.Data>
+                        <dxc:SeriesDataAdapter DataSource="{Binding DataPoints}" 
+                                               ArgumentDataMember="Count">
+                            <dxc:ValueDataMember Type="Value" Member="Value"/>
+                        </dxc:SeriesDataAdapter>
+                    </dxc:SplineSeries.Data>
+                </dxc:SplineSeries>
+            </dxc:ChartView.Series>
+            <dxc:ChartView.AxisX>
+                <dxc:NumericAxisX>
+                    <dxc:NumericAxisX.Title>
+                        <dxc:AxisTitle Text="count"/>
+                    </dxc:NumericAxisX.Title>
+                </dxc:NumericAxisX>
+            </dxc:ChartView.AxisX>
+            <dxc:ChartView.AxisY>
+                <dxc:NumericAxisY>
+                    <dxc:NumericAxisY.Title>
+                        <dxc:AxisTitle Text="光强" />
+                    </dxc:NumericAxisY.Title>
+                </dxc:NumericAxisY>
+            </dxc:ChartView.AxisY>
+        </dxc:ChartView>
+        
+        <Grid Grid.Column="1" Margin="10,70">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0"
+                    Text="接收数据"
+                    Command='{Binding StartDataCommand}'
+                    Margin="10"
+                    />
+            <Button Grid.Row="1"
+                   Text="清空数据"
+                    Command="{Binding ClearCommand}"
+                   Margin="10"
+                />
+        </Grid>
+
+    </Grid>
+</ContentPage>
