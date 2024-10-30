@@ -5,13 +5,15 @@ using System.Collections.ObjectModel;
 using System.Timers; // 使用 System.Timers.Timer
 using SZT.Test.Models;
 using SZT.Test.Services;
+using SZT.Test.View;
 
 namespace SZT.Test.ViewModels;
 
 #region 10.30 调试
-public partial class ResultViewModel : ObservableObject
+public partial class ChartViewModel : ObservableObject
 {
     private readonly DataShowStorage _dataShowStorage;
+    private readonly RootNavigateService _rootNavigateService;
     private System.Timers.Timer _dataTimer; // 定时器，用于生成数据
 
     public ObservableCollection<DataPoint> DataPoints { get; } = new ObservableCollection<DataPoint>();
@@ -28,9 +30,10 @@ public partial class ResultViewModel : ObservableObject
     private bool ispointCounter = true;
 
 
-    public ResultViewModel(DataShowStorage dataShowStorage)
+    public ChartViewModel(DataShowStorage dataShowStorage ,RootNavigateService rootNavigateService)
     {
         _dataShowStorage = dataShowStorage;
+        _rootNavigateService = rootNavigateService;
 
         // 初始化定时器
         _dataTimer = new System.Timers.Timer(500); // 每 1 秒触发一次
@@ -44,6 +47,10 @@ public partial class ResultViewModel : ObservableObject
     private RelayCommand _clearCommand;
     public RelayCommand ClearCommand =>
         _clearCommand ??= new RelayCommand(StopRandomDataGeneration);
+
+    [RelayCommand]
+    private async Task TurnMenuCommand() => 
+        await _rootNavigateService.NavigateToAsync(nameof(MainView));
 
     // 启动随机数据生成
     private void StartRandomDataGeneration()
@@ -75,7 +82,7 @@ public partial class ResultViewModel : ObservableObject
             ispointCounter = true;
 
             Random random = new Random();
-            int randomData = random.Next(0, 100); // 生成随机数据，范围是 0 到 99
+            int randomData = random.Next(1, 100); // 生成随机数据，范围是 0 到 99
             DataPoints.Add(new DataPoint { Count = _pointCounter++, Value = randomData });
 
             // 通知UI更新

@@ -2,7 +2,11 @@
 using DevExpress.Maui;
 using DevExpress.Maui.Charts;
 using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
 using SZT.Test.ViewModels;
+using SZT.Test.Services;
+using SZT.Test.View;
+using ChartView = SZT.Test.View.ChartView;
 
 namespace SZT.Test
 {
@@ -12,7 +16,7 @@ namespace SZT.Test
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                .UseMauiApp<App>().UseMauiCommunityToolkit().ConfigureFonts()
                 .UseDevExpress()
                 .UseDevExpressCharts()
                 .ConfigureFonts(fonts => {
@@ -21,8 +25,14 @@ namespace SZT.Test
 
 #if DEBUG
             builder.Logging.AddDebug();
-            builder.Services.AddSingleton<ChartView>();
-            builder.Services.AddSingleton<ResultViewModel>();
+            builder.Services.AddScoped<ChartView ,ChartViewModel>();
+            builder.Services.AddSingleton<DataShowStorage>(); // 注册 DataShowStorage 为单例服务
+            builder.Services.AddSingleton<IDataShowStorage , DataShowStorage>();
+
+            builder.Services.AddSingleton<RootNavigateService>();
+            builder.Services.AddSingleton<IRootNavigateService , RootNavigateService>();
+
+            builder.Services.AddTransient<MainView>();
 #endif
 
             return builder.Build();
