@@ -16,7 +16,7 @@ public class DataShowStorage : ObservableObject ,IDataShowStorage
     // 定义一个事件，用于将数据传递给订阅者
     public event Action<int> DataReceived;
 
-    public SerialPort stmcSerialPort { get; set; } = new SerialPort("", 115200);
+    public SerialPort stmcSerialPort { get; set; } = new SerialPort("/dev/ttys4", 115200);
 
     public DataShowStorage()
     {

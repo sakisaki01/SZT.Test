@@ -32,6 +32,8 @@ namespace SZT.Test
             builder.Services.AddSingleton<RootNavigateService>();
             builder.Services.AddSingleton<IRootNavigateService , RootNavigateService>();
 
+            builder.Services.AddSingleton<IDataSaveStorage , DataSaveStorage>();
+
             builder.Services.AddTransient<MainView>();
 #endif
 

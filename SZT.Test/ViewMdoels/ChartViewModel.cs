@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Android.Provider;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,10 +15,15 @@ public partial class ChartViewModel : ObservableObject
 {
     private readonly DataShowStorage _dataShowStorage;
     private readonly RootNavigateService _rootNavigateService;
+    private IDataSaveStorage _dataSaveStorage;
+
     private System.Timers.Timer _dataTimer; // 定时器，用于生成数据
 
-    public ObservableCollection<DataPoint> DataPoints { get; } = new ObservableCollection<DataPoint>();
+    public ObservableCollection<DataPoint> DataPoints { get; } = new();
 
+    new List<int> CountList = new();
+    new List<int> ValueList = new();
+    public ObservableCollection<Data> Datas { get; } = new();
 
     [ObservableProperty]
     string light = "信号";
@@ -30,10 +36,12 @@ public partial class ChartViewModel : ObservableObject
     private bool ispointCounter = true;
 
 
-    public ChartViewModel(DataShowStorage dataShowStorage ,RootNavigateService rootNavigateService)
+    public ChartViewModel
+        (DataShowStorage dataShowStorage ,RootNavigateService rootNavigateService ,DataSaveStorage dataSaveStorage)
     {
         _dataShowStorage = dataShowStorage;
         _rootNavigateService = rootNavigateService;
+        _dataSaveStorage = dataSaveStorage;
 
         // 初始化定时器
         _dataTimer = new System.Timers.Timer(500); // 每 1 秒触发一次
@@ -51,6 +59,25 @@ public partial class ChartViewModel : ObservableObject
     [RelayCommand]
     private async Task TurnMenuCommand() => 
         await _rootNavigateService.NavigateToAsync(nameof(MainView));
+
+    [RelayCommand]
+    private async Task SaveDataCommand() =>
+        await SaveDataGeneration( ValueList , CountList);
+
+    private async Task SaveDataGeneration(List<int> valueList , List<int> countList)
+    {
+        await _dataSaveStorage.InitializeAsync();
+
+        var D = new Data {
+            //Id = "001",
+            Value = valueList,
+            Count = countList,
+        };
+        await _dataSaveStorage.AddDataAsync(D);
+    }
+
+
+
 
     // 启动随机数据生成
     private void StartRandomDataGeneration()
@@ -84,6 +111,9 @@ public partial class ChartViewModel : ObservableObject
             Random random = new Random();
             int randomData = random.Next(1, 100); // 生成随机数据，范围是 0 到 99
             DataPoints.Add(new DataPoint { Count = _pointCounter++, Value = randomData });
+
+            CountList.Add(_pointCounter);
+            ValueList.Add(randomData);
 
             // 通知UI更新
             OnPropertyChanged(nameof(DataPoints));
