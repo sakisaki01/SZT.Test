@@ -1,14 +1,16 @@
-﻿
-using SQLite;
-
+﻿using SQLite;
 namespace SZT.Test.Models;
 
-public  class Data
+public class Data
 {
-    [PrimaryKey ,AutoIncrement]
-    public string Id { get; set; }
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
 
-    public List<int> Value { get; set; }
+    //public List<int>? Value { get; set; }
 
-    public List<int> Count { get; set; }
+    //public List<int>? Count { get; set; }
+
+    public int DataValue { get; set; }
+
+    public int DataCount { get; set; }
 }

@@ -7,6 +7,7 @@ using SZT.Test.ViewModels;
 using SZT.Test.Services;
 using SZT.Test.View;
 using ChartView = SZT.Test.View.ChartView;
+using SZT.Test.ViewMdoels;
 
 namespace SZT.Test
 {
@@ -32,6 +33,9 @@ namespace SZT.Test
             builder.Services.AddSingleton<RootNavigateService>();
             builder.Services.AddSingleton<IRootNavigateService , RootNavigateService>();
 
+            builder.Services.AddSingleton<DataSelectView>();
+            builder.Services.AddSingleton<DataSelectViewModel>();
+            builder.Services.AddSingleton<DataSaveStorage>();
             builder.Services.AddSingleton<IDataSaveStorage , DataSaveStorage>();
 
             builder.Services.AddTransient<MainView>();

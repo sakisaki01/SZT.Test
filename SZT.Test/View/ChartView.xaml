@@ -5,13 +5,14 @@
              xmlns:dxc="clr-namespace:DevExpress.Maui.Charts;assembly=DevExpress.Maui.Charts"
              xmlns:viewmodel="clr-namespace:SZT.Test.ViewModels"
              x:DataType="viewmodel:ChartViewModel"
+             xmlns:model="clr-namespace:SZT.Test.Models"
              Title="ChartView">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="700"/>
             <ColumnDefinition Width="AUTO"/>
         </Grid.ColumnDefinitions>
-        
+
         <dxc:ChartView Grid.Column="0">
             <dxc:ChartView.Series>
                 <dxc:SplineSeries DisplayName="{Binding Light}">
@@ -38,9 +39,11 @@
                 </dxc:NumericAxisY>
             </dxc:ChartView.AxisY>
         </dxc:ChartView>
-        
+
+       
         <Grid Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO"/>
                 <RowDefinition Height="AUTO"/>
                 <RowDefinition Height="AUTO"/>
                 <RowDefinition Height="AUTO"/>
@@ -54,8 +57,13 @@
                    Text="清空数据"
                    Command="{Binding ClearCommand}"
                    Margin="10"
-                />
+                    />
             <Button Grid.Row="2"
+                Text="保存数据"
+                Command="{Binding SaveDataCommandCommand}"
+                Margin="10"
+                />
+            <Button Grid.Row="3"
                     Text="主菜单"
                     Command="{Binding TurnMenuCommandCommand}"
                     Margin="10"

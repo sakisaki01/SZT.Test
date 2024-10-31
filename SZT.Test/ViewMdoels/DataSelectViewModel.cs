@@ -15,27 +15,39 @@ public partial class DataSelectViewModel : ObservableObject
     public DataSelectViewModel(IDataSaveStorage dataSaveStorage)
     {
         _dataSaveStorage = dataSaveStorage;
-        DataList = new ObservableCollection<Data>();
     }
 
     // 用于存储显示的数据
-    [ObservableProperty]
-    private ObservableCollection<Data> dataList;
+    public ObservableCollection<Data> Datas { get; } = new ObservableCollection<Data>();
+
+       
 
     [RelayCommand]
     private async Task ShowDataCommand() => await ShowData();
 
+
+
+    [RelayCommand]
+    private async Task ClearAllDataCommand() => await ClearAllDataFunctionAsync();
+
     private async Task ShowData()
     {
+        await _dataSaveStorage.InitializeAsync();
         // 从数据存储中获取数据
         var list = await _dataSaveStorage.GetDataAsync();
 
-        // 清空现有数据，并添加新数据
-        DataList.Clear();
+        
         foreach (var data in list)
         {
-            DataList.Add(data);
+            Datas.Add(data);
         }
+    }
+
+    private async Task ClearAllDataFunctionAsync()
+    {
+        await _dataSaveStorage.InitializeAsync();
+
+        await _dataSaveStorage.ClearAllDataAsync();
     }
 
 }

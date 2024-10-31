@@ -1,4 +1,5 @@
 ﻿using Android.Provider;
+using Android.Runtime;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
@@ -21,8 +22,8 @@ public partial class ChartViewModel : ObservableObject
 
     public ObservableCollection<DataPoint> DataPoints { get; } = new();
 
-    new List<int> CountList = new();
-    new List<int> ValueList = new();
+    List<int> CountList = [1, 2];
+    List<int> ValueList = [1, 2, 3];
     public ObservableCollection<Data> Datas { get; } = new();
 
     [ObservableProperty]
@@ -58,25 +59,22 @@ public partial class ChartViewModel : ObservableObject
 
     [RelayCommand]
     private async Task TurnMenuCommand() => 
-        await _rootNavigateService.NavigateToAsync(nameof(MainView));
+        await _rootNavigateService.NavigateToAsync(nameof(DataSelectView));
 
+    //保存数据
     [RelayCommand]
     private async Task SaveDataCommand() =>
-        await SaveDataGeneration( ValueList , CountList);
+        await SaveDataGeneration();
 
-    private async Task SaveDataGeneration(List<int> valueList , List<int> countList)
+    private async Task SaveDataGeneration()
     {
         await _dataSaveStorage.InitializeAsync();
-
-        var D = new Data {
-            //Id = "001",
-            Value = valueList,
-            Count = countList,
-        };
-        await _dataSaveStorage.AddDataAsync(D);
+        await _dataSaveStorage.AddDataAsync(new Data
+        {
+            DataValue = 11,
+            DataCount = 22,
+        });
     }
-
-
 
 
     // 启动随机数据生成
@@ -91,7 +89,7 @@ public partial class ChartViewModel : ObservableObject
     {
         AllowLiveDataUpdates = false; // 禁止更新数据
         _dataTimer.Stop(); // 停止定时器
-        DataPoints.Clear();
+        //DataPoints.Clear();
         ispointCounter = false;
 
     }
@@ -112,8 +110,8 @@ public partial class ChartViewModel : ObservableObject
             int randomData = random.Next(1, 100); // 生成随机数据，范围是 0 到 99
             DataPoints.Add(new DataPoint { Count = _pointCounter++, Value = randomData });
 
-            CountList.Add(_pointCounter);
-            ValueList.Add(randomData);
+            //CountList.Add(_pointCounter);
+            //ValueList.Add(randomData);
 
             // 通知UI更新
             OnPropertyChanged(nameof(DataPoints));

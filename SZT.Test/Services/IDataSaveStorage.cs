@@ -10,7 +10,9 @@ public  interface IDataSaveStorage
 
     Task AddDataAsync(Data data);
 
-    void RemoveData(Data data);
+    Task RemoveData(Data data);
+
+    Task ClearAllDataAsync();
 
     Task<IEnumerable<Data>> GetDataAsync();
 }

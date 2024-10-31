@@ -4,6 +4,7 @@
              x:Class="SZT.Test.View.DataSelectView"
              xmlns:vm ="clr-namespace:SZT.Test.ViewMdoels"
              x:DataType="vm:DataSelectViewModel"
+             xmlns:model="clr-namespace:SZT.Test.Models"
              Title="DataSelectView">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -11,11 +12,34 @@
             <ColumnDefinition Width="AUTO"/>
         </Grid.ColumnDefinitions>
 
+        <CollectionView Grid.Column="0"
+                  ItemsSource="{Binding Datas}"
+                  >
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Data">
+                    <ViewCell>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding DataValue}"/>
+                            <Label Text="{Binding DataCount}"/>
+                        </VerticalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
         <Grid Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="AUTO"/>
                 <RowDefinition Height="AUTO"/>
             </Grid.RowDefinitions>
+            <Button
+                Text="读取数据"
+                Command="{Binding ShowDataCommandCommand}"
+                Margin="10"/>
+            <Button Grid.Row="1"
+                Text="清除所有数据"
+                Command="{Binding ClearAllDataCommandCommand}"
+                Margin="10"/>
         </Grid>
 
     </Grid>

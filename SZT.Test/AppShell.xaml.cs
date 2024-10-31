@@ -20,14 +20,16 @@ namespace SZT.Test
 
             Routing.RegisterRoute(nameof(MainView),typeof(MainView));
 
+            Routing.RegisterRoute(nameof(DataSelectView),typeof(DataSelectView));
+
             Items.Add(new FlyoutItem
             {
-                Title = nameof(ChartView),
-                Route = nameof(ChartView),
+                Title = nameof(DataSelectView),
+                Route = nameof(DataSelectView),
                 Items =
                 {
                     new ShellContent{
-                    ContentTemplate = new DataTemplate(typeof(ChartView))}
+                    ContentTemplate = new DataTemplate(typeof(DataSelectView))}
                 }
             });
         }

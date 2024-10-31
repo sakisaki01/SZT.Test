@@ -1,6 +1,4 @@
-﻿
-
-using SQLite;
+﻿using SQLite;
 using SZT.Test.Models;
 
 namespace SZT.Test.Services;
@@ -14,18 +12,19 @@ public class DataSaveStorage : IDataSaveStorage
         Environment.GetFolderPath(
             Environment.SpecialFolder.LocalApplicationData), DbFileName);
 
-    //数据库连接
+    //打开数据库连接
     private SQLiteAsyncConnection? _connection;
     public SQLiteAsyncConnection Connection =>
         _connection ??= new SQLiteAsyncConnection(DataDbPath);
+
 
     public async Task InitializeAsync()
     {
         await Connection.CreateTableAsync<Data>();
     }
 
-    public async Task AddDataAsync(Data data)
-    {
+    public async Task AddDataAsync(Data data) { 
+    
         await Connection.InsertAsync(data);
     }
 
@@ -35,9 +34,13 @@ public class DataSaveStorage : IDataSaveStorage
     }
 
 
-    public void RemoveData(Data data)
+    public async Task RemoveData(Data data)
     {
-        throw new NotImplementedException();
+        await Connection.DeleteAsync(data); // 删除指定数据
+    }
+
+    public async Task ClearAllDataAsync() {
+        await Connection.ExecuteAsync("DELETE FROM Data");
     }
 }
 
