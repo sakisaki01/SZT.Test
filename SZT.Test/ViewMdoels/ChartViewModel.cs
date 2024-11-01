@@ -71,10 +71,22 @@ public partial class ChartViewModel : ObservableObject
         await _dataSaveStorage.InitializeAsync();
         await _dataSaveStorage.AddDataAsync(new Data
         {
-            DataValue = 11,
-            DataCount = 22,
+            DataValue = "12",
+            DataCount = "34",
         });
     }
+
+    private RelayCommand _ShowDataCommand;
+    public RelayCommand ShowDataCommand =>
+        _ShowDataCommand ??= new RelayCommand(async () =>
+        {
+            //await _dataSaveStorage.InitializeAsync();
+            var list = await _dataSaveStorage.GetDataAsync();
+            foreach (var data in list)
+            {
+                Datas.Add(data);
+            }
+        });
 
 
     // 启动随机数据生成

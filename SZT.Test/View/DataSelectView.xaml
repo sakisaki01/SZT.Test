@@ -13,9 +13,9 @@
         </Grid.ColumnDefinitions>
 
         <CollectionView Grid.Column="0"
-                  ItemsSource="{Binding Datas}"
-                  >
-            <CollectionView.ItemTemplate>
+            ItemsSource="{Binding Datas}">
+
+            <!--<CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Data">
                     <ViewCell>
                         <VerticalStackLayout>
@@ -24,7 +24,7 @@
                         </VerticalStackLayout>
                     </ViewCell>
                 </DataTemplate>
-            </CollectionView.ItemTemplate>
+            </CollectionView.ItemTemplate>-->
         </CollectionView>
         
         <Grid Grid.Column="1" Margin="10">
@@ -34,7 +34,7 @@
             </Grid.RowDefinitions>
             <Button
                 Text="读取数据"
-                Command="{Binding ShowDataCommandCommand}"
+                Command="{Binding ShowDataCommand}"
                 Margin="10"/>
             <Button Grid.Row="1"
                 Text="清除所有数据"

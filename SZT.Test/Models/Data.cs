@@ -10,7 +10,7 @@ public class Data
 
     //public List<int>? Count { get; set; }
 
-    public int DataValue { get; set; }
+    public string DataValue { get; set; }
 
-    public int DataCount { get; set; }
+    public string DataCount { get; set; }
 }

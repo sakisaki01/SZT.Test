@@ -6,7 +6,7 @@ namespace SZT.Test.Services;
 public class DataSaveStorage : IDataSaveStorage
 {
     //创建数据库地址
-    public const string DbFileName = "SZT.sqlite";
+    public const string DbFileName = "SZT.sqlite3";
     public static readonly string DataDbPath =
         Path.Combine(
         Environment.GetFolderPath(
@@ -20,6 +20,7 @@ public class DataSaveStorage : IDataSaveStorage
 
     public async Task InitializeAsync()
     {
+        //await Connection.DropTableAsync<Data>(); // 删除旧表结构（如果已存在）
         await Connection.CreateTableAsync<Data>();
     }
 
