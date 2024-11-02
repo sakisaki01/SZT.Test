@@ -7,20 +7,17 @@ namespace SZT.Test
         public AppShell()
         {
             InitializeComponent();
+
             Items.Add(new FlyoutItem
             {
-                Title = nameof(MainView),
-                Route = nameof(MainView),
+                Title = nameof(ChartView),
+                Route = nameof(ChartView),
                 Items =
                 {
                     new ShellContent{
-                    ContentTemplate = new DataTemplate(typeof(MainView))}
+                    ContentTemplate = new DataTemplate(typeof(ChartView))}
                 }
             });
-
-            Routing.RegisterRoute(nameof(MainView),typeof(MainView));
-
-            Routing.RegisterRoute(nameof(DataSelectView),typeof(DataSelectView));
 
             Items.Add(new FlyoutItem
             {
@@ -32,6 +29,14 @@ namespace SZT.Test
                     ContentTemplate = new DataTemplate(typeof(DataSelectView))}
                 }
             });
+
+            Routing.RegisterRoute(nameof(MainView),typeof(MainView));
+
+            Routing.RegisterRoute(nameof(DataSelectView),typeof(DataSelectView));
+
+            Routing.RegisterRoute(nameof(ChartView),typeof(ChartView));
+
+
         }
     }
 }

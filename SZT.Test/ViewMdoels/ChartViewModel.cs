@@ -23,7 +23,7 @@ public partial class ChartViewModel : ObservableObject
     public ObservableCollection<DataPoint> DataPoints { get; } = new();
 
     List<int> CountList = [1, 2];
-    List<int> ValueList = [1, 2, 3];
+    List<int> ValueList = [];
     public ObservableCollection<Data> Datas { get; } = new();
 
     [ObservableProperty]
@@ -63,30 +63,15 @@ public partial class ChartViewModel : ObservableObject
 
     //保存数据
     [RelayCommand]
-    private async Task SaveDataCommand() =>
-        await SaveDataGeneration();
+    private async Task SaveDataCommand() => await SaveDataGeneration();
 
     private async Task SaveDataGeneration()
     {
         await _dataSaveStorage.InitializeAsync();
-        await _dataSaveStorage.AddDataAsync(new Data
-        {
-            DataValue = "12",
-            DataCount = "34",
-        });
+        await _dataSaveStorage.AddDataAsync(new Data { Uid = "1sd1" }, ValueList);
+        ValueList.Clear();
     }
 
-    private RelayCommand _ShowDataCommand;
-    public RelayCommand ShowDataCommand =>
-        _ShowDataCommand ??= new RelayCommand(async () =>
-        {
-            //await _dataSaveStorage.InitializeAsync();
-            var list = await _dataSaveStorage.GetDataAsync();
-            foreach (var data in list)
-            {
-                Datas.Add(data);
-            }
-        });
 
 
     // 启动随机数据生成
@@ -101,7 +86,7 @@ public partial class ChartViewModel : ObservableObject
     {
         AllowLiveDataUpdates = false; // 禁止更新数据
         _dataTimer.Stop(); // 停止定时器
-        //DataPoints.Clear();
+        DataPoints.Clear();
         ispointCounter = false;
 
     }
@@ -123,7 +108,7 @@ public partial class ChartViewModel : ObservableObject
             DataPoints.Add(new DataPoint { Count = _pointCounter++, Value = randomData });
 
             //CountList.Add(_pointCounter);
-            //ValueList.Add(randomData);
+            ValueList.Add(randomData);
 
             // 通知UI更新
             OnPropertyChanged(nameof(DataPoints));

@@ -21,35 +21,37 @@ public partial class DataSelectViewModel : ObservableObject
     public  ObservableCollection<Data> Datas { get; } = new ObservableCollection<Data>();
 
 
-
-
-    private RelayCommand _ShowDataCommand;
-    public RelayCommand ShowDataCommand =>
-        _ShowDataCommand ??= new RelayCommand(async () => { await ShowData(); });
-
-
-
     [RelayCommand]
     private async Task ClearAllDataCommand() => await ClearAllDataFunctionAsync();
 
-    public  async Task ShowData()
-    {
-        //await _dataSaveStorage.InitializeAsync();
-        // 从数据存储中获取数据
-        var list = await _dataSaveStorage.GetDataAsync();
+    //[RelayCommand]
+    //private async Task DeleteData() => await _dataSaveStorage.RemoveData();
 
+    [RelayCommand]
+    private async Task ShowData() => await LoadDataAsync();
+
+    public  async Task LoadDataAsync()
+    {
+        await _dataSaveStorage.InitializeAsync();
+        // 从数据存储中获取数据
+        var dataList = await _dataSaveStorage.GetDataAsync();
         
-        foreach (var data in list)
+        foreach (var data in dataList)
         {
             Datas.Add(data);
         }
     }
+
+
 
     private async Task ClearAllDataFunctionAsync()
     {
         await _dataSaveStorage.InitializeAsync();
 
         await _dataSaveStorage.ClearAllDataAsync();
+
+        Datas.Clear();
+        
     }
 
 }

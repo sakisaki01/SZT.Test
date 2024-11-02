@@ -9,7 +9,7 @@
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:ChartView}"
-        Route="ChartView" />
+        ContentTemplate="{DataTemplate local:MainView}"
+        Route="MainView" />
 
 </Shell>

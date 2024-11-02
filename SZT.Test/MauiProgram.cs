@@ -38,7 +38,9 @@ namespace SZT.Test
             builder.Services.AddSingleton<DataSaveStorage>();
             builder.Services.AddSingleton<IDataSaveStorage , DataSaveStorage>();
 
-            builder.Services.AddTransient<MainView>();
+            builder.Services.AddSingleton<MainView>();
+            builder.Services.AddSingleton<MainViewModel>();
+
 #endif
 
             return builder.Build();

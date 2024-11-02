@@ -8,11 +8,11 @@ public  interface IDataSaveStorage
 {
     Task InitializeAsync();
 
-    Task AddDataAsync(Data data);
+    Task AddDataAsync(Data data, List<int> numbers);
 
     Task RemoveData(Data data);
 
     Task ClearAllDataAsync();
 
-    Task<IEnumerable<Data>> GetDataAsync();
+    Task<List<Data>> GetDataAsync();
 }
