@@ -17,7 +17,7 @@
                     <ViewCell>
                         <VerticalStackLayout>
                             <Label Text="{Binding Uid}"/>
-                            <Label Text="{Binding Numbers}"/>
+                            <Label Text="{Binding LogTime}"/>
                         </VerticalStackLayout>
                     </ViewCell>
                 </DataTemplate>
@@ -26,6 +26,7 @@
         
         <Grid Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO"/>
                 <RowDefinition Height="AUTO"/>
                 <RowDefinition Height="AUTO"/>
             </Grid.RowDefinitions>
@@ -37,6 +38,10 @@
                 Text="清除所有数据"
                 Command="{Binding ClearAllDataCommandCommand}"
                 Margin="10"/>
+            <Button Grid.Row="2"
+                    Text="主菜单"
+                    Command="{Binding TurnMenuCommandCommand}"
+                    Margin="10"/>
         </Grid>
 
     </Grid>

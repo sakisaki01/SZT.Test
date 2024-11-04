@@ -1,20 +1,22 @@
 ﻿
-using Android.Hardware;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using SZT.Test.Models;
 using SZT.Test.Services;
+using SZT.Test.View;
 
 namespace SZT.Test.ViewMdoels;
 
 public partial class DataSelectViewModel : ObservableObject
 {
     private IDataSaveStorage _dataSaveStorage;
+    private IRootNavigateService _rootNavigateService;
 
-    public DataSelectViewModel(IDataSaveStorage dataSaveStorage)
+    public DataSelectViewModel(IDataSaveStorage dataSaveStorage , IRootNavigateService rootNavigateService)
     {
         _dataSaveStorage = dataSaveStorage;
+        _rootNavigateService = rootNavigateService;
     }
 
     // 用于存储显示的数据
@@ -23,6 +25,10 @@ public partial class DataSelectViewModel : ObservableObject
 
     [RelayCommand]
     private async Task ClearAllDataCommand() => await ClearAllDataFunctionAsync();
+
+    [RelayCommand]
+    private async Task TurnMenuCommand() =>
+        await _rootNavigateService.NavigateToAsync("///" + nameof(MainView));
 
     //[RelayCommand]
     //private async Task DeleteData() => await _dataSaveStorage.RemoveData();
@@ -41,8 +47,6 @@ public partial class DataSelectViewModel : ObservableObject
             Datas.Add(data);
         }
     }
-
-
 
     private async Task ClearAllDataFunctionAsync()
     {

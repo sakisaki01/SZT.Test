@@ -22,12 +22,19 @@ public partial class ChartViewModel : ObservableObject
 
     public ObservableCollection<DataPoint> DataPoints { get; } = new();
 
+
+    public ObservableCollection<string> userid { get; set; } = new();
+
     List<int> CountList = [1, 2];
     List<int> ValueList = [];
     public ObservableCollection<Data> Datas { get; } = new();
 
     [ObservableProperty]
     string light = "信号";
+
+    [ObservableProperty]
+    string newUid = string.Empty;
+
 
     // 控制实时数据更新的属性
     public bool AllowLiveDataUpdates { get; set; }
@@ -59,7 +66,7 @@ public partial class ChartViewModel : ObservableObject
 
     [RelayCommand]
     private async Task TurnMenuCommand() => 
-        await _rootNavigateService.NavigateToAsync(nameof(DataSelectView));
+        await _rootNavigateService.NavigateToAsync("///"+nameof(MainView));
 
     //保存数据
     [RelayCommand]
@@ -68,8 +75,20 @@ public partial class ChartViewModel : ObservableObject
     private async Task SaveDataGeneration()
     {
         await _dataSaveStorage.InitializeAsync();
-        await _dataSaveStorage.AddDataAsync(new Data { Uid = "1sd1" }, ValueList);
-        ValueList.Clear();
+
+        if (string.IsNullOrWhiteSpace(NewUid))
+        {
+            await Shell.Current.DisplayAlert("提示", "请输入用户ID！", "确定");
+        }
+        else
+        {
+            await _dataSaveStorage.AddDataAsync(new Data { 
+                Uid = NewUid,
+                LogTime = DateTime.Now,}, ValueList);
+            await Shell.Current.DisplayAlert("提示", "数据已保存！", "确定");
+            ValueList.Clear();
+        }
+        
     }
 
 

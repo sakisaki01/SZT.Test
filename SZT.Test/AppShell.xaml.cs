@@ -11,6 +11,7 @@ namespace SZT.Test
             Items.Add(new FlyoutItem
             {
                 Title = nameof(ChartView),
+
                 Route = nameof(ChartView),
                 Items =
                 {

@@ -19,7 +19,7 @@ public class ServiceLocator
         _serviceProvider.GetService<DataSelectViewModel>();
 
     public MainViewModel MainViewModel =>
-        _serviceProvider?.GetService<MainViewModel>();
+        _serviceProvider.GetService<MainViewModel>();
 
     public ServiceLocator()
     {
