@@ -9,12 +9,26 @@
              Title="ChartView">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="450"/>
             <ColumnDefinition Width="AUTO"/>
             <ColumnDefinition Width="AUTO"/>
         </Grid.ColumnDefinitions>
 
-        <dxc:ChartView Grid.Column="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Margin="30,10">
+                <StackLayout>
+                    <Label
+                        Text="用户ID：" 
+                        />
+                    <Entry Placeholder="Uid" WidthRequest="100" Text="{Binding NewUid}" HorizontalOptions="Start"/>
+                </StackLayout>
+            </Grid>
+            
+            <dxc:ChartView Grid.Row="1" Margin="10">
             <dxc:ChartView.Series>
                 <dxc:SplineSeries DisplayName="{Binding Light}">
                     <dxc:SplineSeries.Data>
@@ -40,7 +54,7 @@
                 </dxc:NumericAxisY>
             </dxc:ChartView.AxisY>
         </dxc:ChartView>
-
+        </Grid>
         <Grid Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="AUTO"/>
@@ -68,14 +82,6 @@
                     Command="{Binding TurnMenuCommandCommand}"
                     Margin="10"
                     />
-        </Grid>
-        <Grid Grid.Column="2">
-            <StackLayout>
-                <Label
-                    Text="用户ID：" 
-                    />
-                <Entry Placeholder="Uid" WidthRequest="100" Text="{Binding NewUid}"/>
-            </StackLayout>
         </Grid>
     </Grid>
 </ContentPage>

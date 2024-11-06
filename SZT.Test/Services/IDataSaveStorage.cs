@@ -15,4 +15,7 @@ public  interface IDataSaveStorage
     Task ClearAllDataAsync();
 
     Task<List<Data>> GetDataAsync();
+
+    Task ExportDataRowToExcelAsync(string Uid);
+
 }

@@ -18,8 +18,12 @@ namespace SZT.Test
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>().UseMauiCommunityToolkit().ConfigureFonts()
-                .UseDevExpress()
+                .UseDevExpress(useLocalization: false)
+                .UseDevExpressCollectionView()
+                .UseDevExpressControls()
+                .UseDevExpressEditors()
                 .UseDevExpressCharts()
+                .UseDevExpressDataGrid()
                 .ConfigureFonts(fonts => {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });

@@ -16,14 +16,16 @@
         <Grid Grid.Row="1" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
+            <Button Grid.Column="1"
                     Text="图表"
                     Command="{Binding ChartRootCommand}"/>
                     
-            <Button Grid.Column="2"
+            <Button Grid.Column="3"
                     Text="数据"
                     Command="{Binding DataSelectRootCommand}"/>
         </Grid>

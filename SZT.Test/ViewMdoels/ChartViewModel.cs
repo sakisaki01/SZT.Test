@@ -75,20 +75,26 @@ public partial class ChartViewModel : ObservableObject
     private async Task SaveDataGeneration()
     {
         await _dataSaveStorage.InitializeAsync();
-
+       
         if (string.IsNullOrWhiteSpace(NewUid))
         {
             await Shell.Current.DisplayAlert("提示", "请输入用户ID！", "确定");
         }
         else
         {
-            await _dataSaveStorage.AddDataAsync(new Data { 
+            var data = new Data{
                 Uid = NewUid,
-                LogTime = DateTime.Now,}, ValueList);
-            await Shell.Current.DisplayAlert("提示", "数据已保存！", "确定");
-            ValueList.Clear();
+                LogTime = DateTime.Now
+            };
+            try{
+                await _dataSaveStorage.AddDataAsync(data, ValueList);
+                await Shell.Current.DisplayAlert("提示", "数据已保存！", "确定");
+                ValueList.Clear();
+            }
+            catch (Exception ex) {
+                await Shell.Current.DisplayAlert("错误", $"保存数据失败：{ex.Message}", "确定");
+            }
         }
-        
     }
 
 
