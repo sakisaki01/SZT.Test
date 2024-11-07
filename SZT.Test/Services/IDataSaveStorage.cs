@@ -1,7 +1,5 @@
 ﻿
-
 using SZT.Test.Models;
-
 namespace SZT.Test.Services;
 
 public  interface IDataSaveStorage

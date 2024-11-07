@@ -29,6 +29,7 @@ public class ServiceLocator
         serviceCollection.AddTransient<IDataSaveStorage ,DataSaveStorage>();
         serviceCollection.AddTransient<IDataShowStorage,DataShowStorage>();
         serviceCollection.AddTransient<IRootNavigateService,RootNavigateService>();
+        serviceCollection.AddTransient<IPeakStorage, PeakStorage>();
 
 
         serviceCollection.AddTransient<DataSelectViewModel>();

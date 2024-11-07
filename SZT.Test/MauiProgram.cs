@@ -45,6 +45,10 @@ namespace SZT.Test
             builder.Services.AddSingleton<MainView>();
             builder.Services.AddSingleton<MainViewModel>();
 
+
+            builder.Services.AddSingleton<PeakTestViewModle>();
+
+            builder.Services.AddSingleton<IPeakStorage, PeakStorage>();
 #endif
 
             return builder.Build();

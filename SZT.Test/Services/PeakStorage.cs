@@ -3,7 +3,7 @@ namespace SZT.Test.Services;
 
 public class PeakStorage : IPeakStorage
 {
-    public double CalculatePeakArea(double[] data, int peakIndex)
+    public  double CalculatePeakArea(double[] data, int peakIndex, double threshold = 0.1, int maxWidth = 20)
     {
         // 检查给定的波峰索引是否在有效范围内
         if (peakIndex <= 0 || peakIndex >= data.Length - 1)
@@ -15,33 +15,42 @@ public class PeakStorage : IPeakStorage
         int leftIndex = peakIndex;
         int rightIndex = peakIndex;
 
-        // 向左扩展边界
-        while (leftIndex > 0 && data[leftIndex] >= data[leftIndex - 1])
+        // 向左扩展边界，加入阈值判断并限制最大距离
+        int leftLimit = Math.Max(0, peakIndex - maxWidth); // 限制左边界的最小位置
+        while (leftIndex > leftLimit && data[leftIndex] >= data[leftIndex - 1] - threshold)
         {
             leftIndex--;
         }
-        Console.WriteLine(leftIndex);
+        Console.WriteLine($"左边界索引: {leftIndex}");
 
-        // 向右扩展边界
-        while (rightIndex < data.Length - 1 && data[rightIndex] >= data[rightIndex + 1])
+        // 向右扩展边界，加入阈值判断并限制最大距离
+        int rightLimit = Math.Min(data.Length - 1, peakIndex + maxWidth); // 限制右边界的最大位置
+        while (rightIndex < rightLimit && data[rightIndex] >= data[rightIndex + 1] - threshold)
         {
             rightIndex++;
         }
-        Console.WriteLine(rightIndex);
+        Console.WriteLine($"右边界索引: {rightIndex}");
 
         // 计算波峰的面积（使用梯形法）
         double area = 0.0;
         for (int i = leftIndex; i < rightIndex; i++)
         {
-            area += (data[i] + data[i + 1]) / 2.0; // 梯形法
+            area += (data[i] + data[i + 1]) / 2.0;
         }
 
         return area;
     }
 
-    public int[] FindPeak(double[] data, double amplitudeThreshold, int minDistance)
+    /// <summary>
+    /// 寻峰算法
+    /// </summary>
+    /// <param name="data">传入数据</param>
+    /// <param name="amplitudeThreshold"> 幅度阈值</param>
+    /// <param name="minDistance"> 距离阈值</param>
+    /// <returns></returns>
+    public int[] FindPeak(int[] data, double amplitudeThreshold, int minDistance)
     {
-        double[] diff = new double[data.Length - 1];
+        int[] diff = new int[data.Length - 1];
         for (int i = 0; i < diff.Length; i++)
         {
             diff[i] = data[i + 1] - data[i];

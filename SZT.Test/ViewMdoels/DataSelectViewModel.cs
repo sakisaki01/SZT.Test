@@ -54,7 +54,7 @@ public partial class DataSelectViewModel : ObservableObject
     private void SaveData() => SaveSelectedData();
 
 
-    public  async Task LoadDataAsync()
+    private  async Task LoadDataAsync()
     {
         await _dataSaveStorage.InitializeAsync();
         // 从数据存储中获取数据

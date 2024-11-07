@@ -16,8 +16,22 @@ public partial class ChartViewModel : ObservableObject
 {
     private readonly DataShowStorage _dataShowStorage;
     private readonly RootNavigateService _rootNavigateService;
-    private IDataSaveStorage _dataSaveStorage;
+    private readonly IPeakStorage _peakStorage;
+    private readonly IDataSaveStorage _dataSaveStorage;
 
+    public ChartViewModel
+        (DataShowStorage dataShowStorage, RootNavigateService rootNavigateService, 
+        DataSaveStorage dataSaveStorage,IPeakStorage peakStorage)
+    {
+        _dataShowStorage = dataShowStorage;
+        _rootNavigateService = rootNavigateService;
+        _dataSaveStorage = dataSaveStorage;
+        _peakStorage = peakStorage;
+
+        // 初始化定时器
+        _dataTimer = new System.Timers.Timer(500); // 每 1 秒触发一次
+        _dataTimer.Elapsed += GenerateRandomData; // 绑定定时生成数据的方法
+    }
     private System.Timers.Timer _dataTimer; // 定时器，用于生成数据
 
     public ObservableCollection<DataPoint> DataPoints { get; } = new();
@@ -35,6 +49,31 @@ public partial class ChartViewModel : ObservableObject
     [ObservableProperty]
     string newUid = string.Empty;
 
+    private int[] peakdatas;
+
+    [ObservableProperty]
+    double amplitudeThreshold = 7;
+
+    [ObservableProperty]
+    int minDistance = 10;
+
+    [ObservableProperty]
+    int tPeak;
+
+    [ObservableProperty]
+    int firstPeak;
+
+    [ObservableProperty]
+    int secondPeak;
+
+    [ObservableProperty]
+    int thirdPeak;
+
+    [ObservableProperty]
+    double tPeakArea;
+
+    [ObservableProperty]
+    double firstPeakArea;
 
     // 控制实时数据更新的属性
     public bool AllowLiveDataUpdates { get; set; }
@@ -43,18 +82,6 @@ public partial class ChartViewModel : ObservableObject
 
     private bool ispointCounter = true;
 
-
-    public ChartViewModel
-        (DataShowStorage dataShowStorage ,RootNavigateService rootNavigateService ,DataSaveStorage dataSaveStorage)
-    {
-        _dataShowStorage = dataShowStorage;
-        _rootNavigateService = rootNavigateService;
-        _dataSaveStorage = dataSaveStorage;
-
-        // 初始化定时器
-        _dataTimer = new System.Timers.Timer(500); // 每 1 秒触发一次
-        _dataTimer.Elapsed += GenerateRandomData; // 绑定定时生成数据的方法
-    }
 
     private RelayCommand _startDataCommand;
     public RelayCommand StartDataCommand =>
@@ -71,6 +98,9 @@ public partial class ChartViewModel : ObservableObject
     //保存数据
     [RelayCommand]
     private async Task SaveDataCommand() => await SaveDataGeneration();
+
+    [RelayCommand]
+    private void PeakSearch() => PeakSearchFunc();
 
     private async Task SaveDataGeneration()
     {
@@ -96,7 +126,16 @@ public partial class ChartViewModel : ObservableObject
             }
         }
     }
+    //寻峰
+    private void PeakSearchFunc()
+    {
+        int[] peaks = _peakStorage.FindPeak(peakdatas, AmplitudeThreshold, MinDistance);
 
+        peaks[0] = TPeak;
+        peaks[1] = FirstPeak;
+        peaks[2] = SecondPeak;
+        peaks[3] = ThirdPeak;
+    }
 
 
     // 启动随机数据生成
@@ -134,7 +173,7 @@ public partial class ChartViewModel : ObservableObject
 
             //CountList.Add(_pointCounter);
             ValueList.Add(randomData);
-
+            peakdatas = new int[ValueList.Count];
             // 通知UI更新
             OnPropertyChanged(nameof(DataPoints));
         }
