@@ -5,29 +5,47 @@ using SZT.Test.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Maixin.Auto.Services;
 using Xamarin.KotlinX.Coroutines;
-
+using System.Diagnostics;
+using System.Collections.ObjectModel;
+using Xamarin.Google.Crypto.Tink.Shaded.Protobuf;
 
 namespace SZT.Test.Services;
 
-public class DataShowStorage : ObservableObject ,IDataShowStorage
+public class DataShowStorage : ObservableObject , IDataShowStorage
 {
-    private readonly SerialPort _serialPort;
 
-    // 定义一个事件，用于将数据传递给订阅者
-    public event Action<int> DataReceived;
+    public static DataShowStorage Instance { get; private set; } = new DataShowStorage();
 
-    public SerialPort stmcSerialPort { get; set; } = new SerialPort("/dev/ttys4", 115200);
+    public ObservableCollection<DataPoint> DataPoints { get; set; } = new ObservableCollection<DataPoint>();
+
+    public SerialPort StmcSerialPort { get; set; } = new SerialPort("/dev/ttyS7", 115200);
+
+    public List<int> ValueList { get; set; } = [];
 
     public DataShowStorage()
     {
-        stmcSerialPort.Open();
+        StmcSerialPort.Open();
+        StmcSerialPort.DataReceived += OnDataReceived;
+        Debug.WriteLine(StmcSerialPort.Open());
     }
 
-    public void OnDataReceived(object sender, ElapsedEventArgs e)
+    public int DataCount { get; set; } = 1;
+
+    public void OnDataReceived(object sender, LiquidMobile.Services.SerialPortDataReceEventArgs e)
     {
-        string rawData = _serialPort.ReadLine();
-        int.TryParse(rawData,  out int data);
-        DataReceived?.Invoke(data);  // 直接触发事件
+        try
+        {
+            if (e.Length <= 0) return;
+            string str = Encoding.Default.GetString(e.Data);
+            if (!int.TryParse(str, out int a)) return;
+
+            DataPoints.Add(new DataPoint { Count = DataCount++, Value = a });
+            ValueList.Add(a);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error reading from serial port: {ex.Message}");
+        }
     }
 
 }

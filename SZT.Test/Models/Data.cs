@@ -14,20 +14,36 @@ public class Data : INotifyPropertyChanged
 
     public DateTime LogTime { get; set; }/* = DateTime.Now.ToNearbySecond();*/
 
-    public bool IsSelected { get;set; } = true;
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (_isSelected != value)
+            {
+                _isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+
+                // 触发事件来更新 ViewModel 中的选择列表
+                SelectionChanged?.Invoke(Id, _isSelected);
+            }
+        }
+    }
+
+    public event Action<int, bool> SelectionChanged;
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
 
     [Ignore]
     public List<int> Numbers { get; set; } = new List<int>();
     public override string ToString()
     {
         return string.Join(", ", Numbers); // 以逗号分隔的字符串
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
 

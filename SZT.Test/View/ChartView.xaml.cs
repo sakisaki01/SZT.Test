@@ -17,5 +17,7 @@ namespace SZT.Test.View
             InitializeComponent();
             BindingContext = viewModel;
         }
+
+
     }
 }

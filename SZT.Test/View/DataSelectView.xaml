@@ -21,9 +21,9 @@
 
             <dxg:DataGridView ItemsSource="{Binding Datas}" EditorShowMode="Tap" >
                 <dxg:DataGridView.Columns>
-                    <dxg:TextColumn FieldName="Uid" Caption="用户ID" IsReadOnly="True"/>
+                    <dxg:TextColumn FieldName="Uid" Caption="用户ID" IsReadOnly="True" />
                     <dxg:TextColumn FieldName="LogTime" Caption="时间" IsReadOnly="True"/>
-                    <dxg:CheckBoxColumn FieldName="IsSelected" Width="100" Caption="save"/>
+                    <dxg:CheckBoxColumn FieldName="IsSelected" Width="100" Caption="save" />
                 </dxg:DataGridView.Columns>
             </dxg:DataGridView>
 

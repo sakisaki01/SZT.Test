@@ -11,4 +11,9 @@ public partial class DataSelectView : ContentPage
 
         BindingContext = vm;
     }
+
+    private void CheckBoxColumn_BindingContextChanged(object sender, EventArgs e)
+    {
+
+    }
 }

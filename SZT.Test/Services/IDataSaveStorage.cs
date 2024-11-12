@@ -10,6 +10,8 @@ public  interface IDataSaveStorage
 
     Task RemoveData(Data data);
 
+    Task UpdateDataSelectionStatus(Data data);
+
     Task ClearAllDataAsync();
 
     Task<List<Data>> GetDataAsync();

@@ -5,6 +5,7 @@ using AndroidX.Core.App;
 using AndroidX.Core.Content;
 using OfficeOpenXml;
 using Bumptech.Glide.Util;
+using System.Diagnostics;
 namespace SZT.Test.Services;
 
 public class DataSaveStorage : IDataSaveStorage
@@ -40,7 +41,8 @@ public class DataSaveStorage : IDataSaveStorage
     /// <param name="numbers"></param>
     /// <returns></returns>
     public async Task AddDataAsync(Data data,List<int> numbers) {
-
+        if (_connection == null)
+            await InitializeAsync();
         await Connection.InsertAsync(data);
         await Task.Delay(100); // 等待 SQLite 异步操作确保 Id 生成（可调整
 
@@ -67,7 +69,11 @@ public class DataSaveStorage : IDataSaveStorage
     // 获取所有 Data 及其关联的 List<int> 数据
     public async Task<List<Data>> GetDataAsync()
     {
-        await InitializeAsync();
+        string root = USBDiskRoute;
+        Debug.WriteLine(root);
+
+        if (_connection == null)
+            await InitializeAsync();
         // 获取所有 Data 项
         var dataList = await Connection.Table<Data>().ToListAsync();
 
@@ -89,6 +95,28 @@ public class DataSaveStorage : IDataSaveStorage
                             .Where(dn => dn.DataId == dataId)
                             .ToListAsync();
         return numbers.Select(dn => dn.Number).ToList();
+    }
+
+    private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
+    {
+        if (_connection == null)
+        {
+            _connection = new SQLiteAsyncConnection(DataDbPath);
+            await _connection.CreateTableAsync<Data>(); // 初始化创建表结构
+            await _connection.CreateTableAsync<DataNumber>();
+        }
+        return _connection;
+    }
+
+    /// <summary>
+    /// 更新数据库
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public async Task UpdateDataSelectionStatus(Data data)
+    {
+        var db = await GetDatabaseAsync(); // 获取数据库实例
+        await db.UpdateAsync(data); // 更新 
     }
 
 
@@ -136,6 +164,37 @@ public class DataSaveStorage : IDataSaveStorage
         }
     }
 
+    public static string USBDiskRoute
+    {
+        get
+        {
+            try
+            {
+                var directories = Directory.GetDirectories("/storage");
+                foreach (string driver in directories)
+                {
+                    if (driver.Contains("udiskh"))
+                    {
+                        var subDirs = Directory.GetDirectories(driver);
+                        if (subDirs.Length > 0)
+                        {
+                            return subDirs[0]; // 返回第一个子目录路径
+                        }
+                        return driver; // 返回根 USB_DISK 路径
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error accessing USB storage: {ex.Message}");
+            }
+
+            return null;
+        }
+    }
+
+
+
     /// <summary>
     /// 保存为excle
     /// </summary>
@@ -143,6 +202,7 @@ public class DataSaveStorage : IDataSaveStorage
     /// <returns></returns>
     public async Task ExportDataRowToExcelAsync(string Uid)
     {
+        string root = USBDiskRoute;
         // 请求存储权限
         await RequestStoragePermissionAsync();
 
